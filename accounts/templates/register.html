@@ -1,0 +1,257 @@
+{% extends 'base.html' %}
+
+{% block title %}Cadastre-se - PycodeBR{% endblock %}
+
+{% block content %}
+<style>
+  .register-container {
+    max-width: 480px;
+    margin: 60px auto;
+    padding: 20px;
+  }
+
+  .register-card {
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .register-header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .register-header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #2d3748;
+    margin-bottom: 8px;
+  }
+
+  .register-header p {
+    font-size: 14px;
+    color: #718096;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-group label {
+    display: block;
+    font-weight: 600;
+    color: #2d3748;
+    margin-bottom: 6px;
+    font-size: 14px;
+  }
+
+  .form-group input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #cbd5e0;
+    border-radius: 6px;
+    font-size: 15px;
+    font-family: inherit;
+    transition: all 0.2s;
+  }
+
+  .form-group input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  }
+
+  .error-message {
+    color: #e53e3e;
+    font-size: 13px;
+    margin-top: 4px;
+  }
+
+  .alert-error {
+    background-color: #fed7d7;
+    color: #c53030;
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    border-left: 4px solid #e53e3e;
+  }
+
+  .help-text {
+    font-size: 12px;
+    color: #718096;
+    margin-top: 4px;
+    line-height: 1.4;
+  }
+
+  .btn-register {
+    width: 100%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 10px;
+  }
+
+  .btn-register:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  }
+
+  .login-link {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #718096;
+  }
+
+  .login-link a {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .login-link a:hover {
+    text-decoration: underline;
+  }
+
+  .password-requirements {
+    background: #f7fafc;
+    padding: 12px;
+    border-radius: 6px;
+    margin-top: 8px;
+  }
+
+  .password-requirements ul {
+    margin: 0;
+    padding-left: 20px;
+    font-size: 12px;
+    color: #4a5568;
+  }
+
+  .password-requirements li {
+    margin: 4px 0;
+  }
+
+  @media (max-width: 768px) {
+    .register-card {
+      padding: 30px 20px;
+    }
+
+    .register-header h1 {
+      font-size: 24px;
+    }
+  }
+</style>
+
+<div class="register-container">
+  <div class="register-card">
+    <div class="register-header">
+      <h1>Criar Nova Conta</h1>
+      <p>Junte-se à PycodeBR Multimarcas</p>
+    </div>
+
+    <form method="post" novalidate>
+      {% csrf_token %}
+
+      {% if user_form.non_field_errors %}
+        <div class="alert-error">
+          {% for error in user_form.non_field_errors %}
+            {{ error }}
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <div class="form-group">
+        <label for="{{ user_form.username.id_for_label }}">
+          Nome de Usuário
+        </label>
+        {{ user_form.username }}
+        {% if user_form.username.errors %}
+          <div class="error-message">
+            {{ user_form.username.errors|striptags }}
+          </div>
+        {% else %}
+          <div class="help-text">
+            Escolha um nome único para sua conta
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        <label for="{{ user_form.password1.id_for_label }}">
+          Senha
+        </label>
+        {{ user_form.password1 }}
+        {% if user_form.password1.errors %}
+          <div class="error-message">
+            {{ user_form.password1.errors|striptags }}
+          </div>
+        {% else %}
+          <div class="password-requirements">
+            <ul>
+              <li>Mínimo de 8 caracteres</li>
+              <li>Não pode ser muito comum</li>
+              <li>Não pode ser totalmente numérica</li>
+            </ul>
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        <label for="{{ user_form.password2.id_for_label }}">
+          Confirmar Senha
+        </label>
+        {{ user_form.password2 }}
+        {% if user_form.password2.errors %}
+          <div class="error-message">
+            {{ user_form.password2.errors|striptags }}
+          </div>
+        {% else %}
+          <div class="help-text">
+            Digite a mesma senha para confirmação
+          </div>
+        {% endif %}
+      </div>
+
+      <button type="submit" class="btn-register">
+        Criar Conta Grátis
+      </button>
+
+      <div class="login-link">
+        Já tem uma conta? <a href="{% url 'login' %}">Faça login</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  // Adicionar classes aos inputs do Django
+  document.addEventListener('DOMContentLoaded', function() {
+    const inputs = document.querySelectorAll('input[type="text"], input[type="password"]');
+    inputs.forEach(input => {
+      input.classList.add('form-control');
+    });
+  });
+
+  // Validação de senha em tempo real (opcional)
+  const password1 = document.querySelector('input[name="password1"]');
+  const password2 = document.querySelector('input[name="password2"]');
+
+  if (password2) {
+    password2.addEventListener('input', function() {
+      if (password1.value !== password2.value && password2.value.length > 0) {
+        password2.style.borderColor = '#e53e3e';
+      } else {
+        password2.style.borderColor = '#cbd5e0';
+      }
+    });
+  }
+</script>
+{% endblock %}
