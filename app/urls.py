@@ -19,7 +19,7 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path
-from cars.views import CarsListView, NewCarCreateView
+from cars.views import CarsListView, NewCarCreateView, car_detail_view
 from accounts.views import register_view, login_view, logout_view
 
 
@@ -36,5 +36,6 @@ urlpatterns = [
     path('login/', login_view, name='login'),
     path('cars/', CarsListView.as_view(), name='cars_list'),
     path('new_car/', NewCarCreateView.as_view(), name='new_car'),
+    path('car/<int:pk>/', car_detail_view, name='car_detail'),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

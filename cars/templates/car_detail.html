@@ -1,0 +1,426 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ car.brand }} {{ car.model }} {{ car.factory_year }} - Andrécode.py
+{% endblock %}
+
+{% block content %}
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    .detail-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 40px 20px;
+    }
+
+    .breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 30px;
+        font-size: 14px;
+        color: #718096;
+    }
+
+    .breadcrumb a {
+        color: #667eea;
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+
+    .breadcrumb a:hover {
+        color: #764ba2;
+        text-decoration: underline;
+    }
+
+    .detail-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .image-section {
+        position: relative;
+        background: #f5f5f5;
+        min-height: 500px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .car-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .image-section:hover .car-image {
+        transform: scale(1.05);
+    }
+
+    .year-badge {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: rgba(255, 255, 255, 0.95);
+        color: #667eea;
+        padding: 10px 20px;
+        border-radius: 30px;
+        font-size: 16px;
+        font-weight: 700;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .info-section {
+        padding: 40px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .car-brand-label {
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: #667eea;
+        font-weight: 700;
+        margin-bottom: 12px;
+    }
+
+    .car-title {
+        font-size: 36px;
+        font-weight: 800;
+        color: #2d3748;
+        margin-bottom: 20px;
+        line-height: 1.2;
+    }
+
+    .car-price {
+        font-size: 42px;
+        font-weight: 800;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 30px;
+    }
+
+    .specs-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-bottom: 30px;
+        padding: 30px 0;
+        border-top: 2px solid #e2e8f0;
+        border-bottom: 2px solid #e2e8f0;
+    }
+
+    .spec-item {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .spec-label {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #718096;
+        font-weight: 600;
+    }
+
+    .spec-value {
+        font-size: 18px;
+        font-weight: 700;
+        color: #2d3748;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 15px;
+        margin-top: auto;
+    }
+
+    .btn {
+        flex: 1;
+        padding: 16px 24px;
+        border: none;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+    }
+
+    .btn-secondary {
+        background: #f7fafc;
+        color: #4a5568;
+        border: 2px solid #e2e8f0;
+    }
+
+    .btn-secondary:hover {
+        background: #e2e8f0;
+        transform: translateY(-2px);
+    }
+
+    .description-section {
+        margin-top: 40px;
+        background: white;
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .description-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: #2d3748;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .description-text {
+        font-size: 16px;
+        line-height: 1.8;
+        color: #4a5568;
+    }
+
+    .features-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .feature-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px;
+        background: #f7fafc;
+        border-radius: 8px;
+        font-size: 14px;
+        color: #2d3748;
+        font-weight: 500;
+    }
+
+    .feature-icon {
+        font-size: 20px;
+    }
+
+    @media (max-width: 968px) {
+        .detail-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .image-section {
+            min-height: 400px;
+        }
+
+        .info-section {
+            padding: 30px 20px;
+        }
+
+        .car-title {
+            font-size: 28px;
+        }
+
+        .car-price {
+            font-size: 32px;
+        }
+
+        .specs-grid {
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .action-buttons {
+            flex-direction: column;
+        }
+
+        .description-section {
+            padding: 30px 20px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .detail-container {
+            padding: 20px 10px;
+        }
+
+        .car-title {
+            font-size: 24px;
+        }
+
+        .car-price {
+            font-size: 28px;
+        }
+
+        .features-list {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="detail-container">
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+        <a href="{% url 'cars_list' %}">🏠 Início</a>
+        <span>›</span>
+        <a href="{% url 'cars_list' %}">Carros</a>
+        <span>›</span>
+        <span>{{ car.brand }} {{ car.model }}</span>
+    </div>
+
+    <!-- Grid Principal -->
+    <div class="detail-grid">
+        <!-- Seção de Imagem -->
+        <div class="image-section">
+            {% if car.photo %}
+            <img src="{{ car.photo.url }}" alt="{{ car.brand }} {{ car.model }} {{ car.factory_year }}"
+                class="car-image">
+            {% else %}
+            <div style="text-align: center; color: #cbd5e0;">
+                <div style="font-size: 64px; margin-bottom: 10px;">🚗</div>
+                <p>Imagem não disponível</p>
+            </div>
+            {% endif %}
+            <div class="year-badge">{{ car.factory_year }}</div>
+        </div>
+
+        <!-- Seção de Informações -->
+        <div class="info-section">
+            <div class="car-brand-label">{{ car.brand }}</div>
+            <h1 class="car-title">{{ car.model }}</h1>
+            <div class="car-price">R$ {{ car.value|floatformat:2 }}</div>
+
+            <!-- Especificações -->
+            <div class="specs-grid">
+                <div class="spec-item">
+                    <span class="spec-label">🏭 Ano de Fabricação</span>
+                    <span class="spec-value">{{ car.factory_year|default:"N/D" }}</span>
+                </div>
+                <div class="spec-item">
+                    <span class="spec-label">📅 Ano do Modelo</span>
+                    <span class="spec-value">{{ car.model_year|default:"N/D" }}</span>
+                </div>
+                <div class="spec-item">
+                    <span class="spec-label">🔖 Placa</span>
+                    <span class="spec-value">{{ car.plate|default:"N/D" }}</span>
+                </div>
+                <div class="spec-item">
+                    <span class="spec-label">🏷️ Marca</span>
+                    <span class="spec-value">{{ car.brand }}</span>
+                </div>
+            </div>
+
+            <!-- Botões de Ação -->
+            <div class="action-buttons">
+                <a href="#" class="btn btn-primary">
+                    💬 Entrar em Contato
+                </a>
+                <a href="{% url 'cars_list' %}" class="btn btn-secondary">
+                    ← Voltar
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Seção de Descrição -->
+    <div class="description-section">
+        <h2 class="description-title">
+            📋 Sobre este veículo
+        </h2>
+        <p class="description-text">
+            Este {{ car.brand }} {{ car.model }} de {{ car.factory_year }} está em excelente estado de conservação.
+            Veículo completo e revisado, pronto para uso. Entre em contato conosco para mais informações,
+            agendar uma visita ou realizar um test-drive.
+        </p>
+
+        <div class="features-list">
+            <div class="feature-item">
+                <span class="feature-icon">✅</span>
+                <span>Documentação em dia</span>
+            </div>
+            <div class="feature-item">
+                <span class="feature-icon">✅</span>
+                <span>Aceita financiamento</span>
+            </div>
+            <div class="feature-item">
+                <span class="feature-icon">✅</span>
+                <span>Aceita troca</span>
+            </div>
+            <div class="feature-item">
+                <span class="feature-icon">✅</span>
+                <span>Garantia disponível</span>
+            </div>
+            <div class="feature-item">
+                <span class="feature-icon">✅</span>
+                <span>Único dono</span>
+            </div>
+            <div class="feature-item">
+                <span class="feature-icon">✅</span>
+                <span>Revisões em concessionária</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Animação de entrada suave
+    document.addEventListener('DOMContentLoaded', function () {
+        const detailGrid = document.querySelector('.detail-grid');
+        const descSection = document.querySelector('.description-section');
+
+        setTimeout(() => {
+            detailGrid.style.opacity = '0';
+            detailGrid.style.transform = 'translateY(20px)';
+            detailGrid.style.transition = 'all 0.6s ease';
+
+            requestAnimationFrame(() => {
+                detailGrid.style.opacity = '1';
+                detailGrid.style.transform = 'translateY(0)';
+            });
+        }, 100);
+
+        setTimeout(() => {
+            descSection.style.opacity = '0';
+            descSection.style.transform = 'translateY(20px)';
+            descSection.style.transition = 'all 0.6s ease';
+
+            requestAnimationFrame(() => {
+                descSection.style.opacity = '1';
+                descSection.style.transform = 'translateY(0)';
+            });
+        }, 300);
+    });
+</script>
+{% endblock %}

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Cadastre-se - PycodeBR{% endblock %}
+{% block title %}Cadastre-se - Andrécode.py{% endblock %}
 
 {% block content %}
 <style>
@@ -154,18 +154,18 @@
   <div class="register-card">
     <div class="register-header">
       <h1>Criar Nova Conta</h1>
-      <p>Junte-se à PycodeBR Multimarcas</p>
+      <p>Junte-se à Andrécode.py Multimarcas</p>
     </div>
 
     <form method="post" novalidate>
       {% csrf_token %}
 
       {% if user_form.non_field_errors %}
-        <div class="alert-error">
-          {% for error in user_form.non_field_errors %}
-            {{ error }}
-          {% endfor %}
-        </div>
+      <div class="alert-error">
+        {% for error in user_form.non_field_errors %}
+        {{ error }}
+        {% endfor %}
+      </div>
       {% endif %}
 
       <div class="form-group">
@@ -174,13 +174,13 @@
         </label>
         {{ user_form.username }}
         {% if user_form.username.errors %}
-          <div class="error-message">
-            {{ user_form.username.errors|striptags }}
-          </div>
+        <div class="error-message">
+          {{ user_form.username.errors|striptags }}
+        </div>
         {% else %}
-          <div class="help-text">
-            Escolha um nome único para sua conta
-          </div>
+        <div class="help-text">
+          Escolha um nome único para sua conta
+        </div>
         {% endif %}
       </div>
 
@@ -190,17 +190,17 @@
         </label>
         {{ user_form.password1 }}
         {% if user_form.password1.errors %}
-          <div class="error-message">
-            {{ user_form.password1.errors|striptags }}
-          </div>
+        <div class="error-message">
+          {{ user_form.password1.errors|striptags }}
+        </div>
         {% else %}
-          <div class="password-requirements">
-            <ul>
-              <li>Mínimo de 8 caracteres</li>
-              <li>Não pode ser muito comum</li>
-              <li>Não pode ser totalmente numérica</li>
-            </ul>
-          </div>
+        <div class="password-requirements">
+          <ul>
+            <li>Mínimo de 8 caracteres</li>
+            <li>Não pode ser muito comum</li>
+            <li>Não pode ser totalmente numérica</li>
+          </ul>
+        </div>
         {% endif %}
       </div>
 
@@ -210,13 +210,13 @@
         </label>
         {{ user_form.password2 }}
         {% if user_form.password2.errors %}
-          <div class="error-message">
-            {{ user_form.password2.errors|striptags }}
-          </div>
+        <div class="error-message">
+          {{ user_form.password2.errors|striptags }}
+        </div>
         {% else %}
-          <div class="help-text">
-            Digite a mesma senha para confirmação
-          </div>
+        <div class="help-text">
+          Digite a mesma senha para confirmação
+        </div>
         {% endif %}
       </div>
 
@@ -233,7 +233,7 @@
 
 <script>
   // Adicionar classes aos inputs do Django
-  document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', function () {
     const inputs = document.querySelectorAll('input[type="text"], input[type="password"]');
     inputs.forEach(input => {
       input.classList.add('form-control');
@@ -245,7 +245,7 @@
   const password2 = document.querySelector('input[name="password2"]');
 
   if (password2) {
-    password2.addEventListener('input', function() {
+    password2.addEventListener('input', function () {
       if (password1.value !== password2.value && password2.value.length > 0) {
         password2.style.borderColor = '#e53e3e';
       } else {

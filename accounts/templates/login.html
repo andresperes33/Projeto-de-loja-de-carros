@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Login - PycodeBR{% endblock %}
+{% block title %}Login - Andrécode.py{% endblock %}
 
 {% block content %}
 <style>
@@ -181,11 +181,11 @@
 
     <!-- Mensagens de sucesso (ex: após cadastro) -->
     {% if messages %}
-      {% for message in messages %}
-        <div class="alert-{{ message.tags }}">
-          {{ message }}
-        </div>
-      {% endfor %}
+    {% for message in messages %}
+    <div class="alert-{{ message.tags }}">
+      {{ message }}
+    </div>
+    {% endfor %}
     {% endif %}
 
     <form method="post">
@@ -193,11 +193,11 @@
 
       <!-- Erros gerais do formulário -->
       {% if login_form.non_field_errors %}
-        <div class="alert-error">
-          {% for error in login_form.non_field_errors %}
-            {{ error }}
-          {% endfor %}
-        </div>
+      <div class="alert-error">
+        {% for error in login_form.non_field_errors %}
+        {{ error }}
+        {% endfor %}
+      </div>
       {% endif %}
 
       <!-- Campo Username -->
@@ -207,9 +207,9 @@
         </label>
         {{ login_form.username }}
         {% if login_form.username.errors %}
-          <div class="error-message">
-            {{ login_form.username.errors|striptags }}
-          </div>
+        <div class="error-message">
+          {{ login_form.username.errors|striptags }}
+        </div>
         {% endif %}
       </div>
 
@@ -220,9 +220,9 @@
         </label>
         {{ login_form.password }}
         {% if login_form.password.errors %}
-          <div class="error-message">
-            {{ login_form.password.errors|striptags }}
-          </div>
+        <div class="error-message">
+          {{ login_form.password.errors|striptags }}
+        </div>
         {% endif %}
       </div>
 
@@ -248,7 +248,7 @@
 
 <script>
   // Adicionar classes aos inputs do Django
-  document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', function () {
     const inputs = document.querySelectorAll('input[type="text"], input[type="password"]');
     inputs.forEach(input => {
       input.classList.add('form-control');

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Cadastrar Carro - PycodeBR{% endblock %}
+{% block title %}Cadastrar Carro - Andrécode.py{% endblock %}
 
 {% block content %}
 <style>
@@ -177,46 +177,46 @@
   <div class="form-card">
     <!-- Mensagens de sucesso/erro -->
     {% if messages %}
-      {% for message in messages %}
-        <div class="alert-{{ message.tags }}">
-          {{ message }}
-        </div>
-      {% endfor %}
+    {% for message in messages %}
+    <div class="alert-{{ message.tags }}">
+      {{ message }}
+    </div>
+    {% endfor %}
     {% endif %}
 
     <form method="post" enctype="multipart/form-data">
       {% csrf_token %}
 
       {% for field in new_car_form %}
-        <div class="form-group">
-          <label for="{{ field.id_for_label }}">
-            {{ field.label }}
-            {% if field.field.required %}
-              <span style="color: #e53e3e;">*</span>
-            {% endif %}
-          </label>
-          
-          {{ field }}
-
-          <!-- Help text específico por campo -->
-          {% if field.name == 'plate' %}
-            <div class="help-text">Ex: ABC-1234 ou ABC1D23</div>
-          {% elif field.name == 'value' %}
-            <div class="help-text">Valor em reais (R$)</div>
-          {% elif field.name == 'photo' %}
-            <div class="help-text">Formatos: JPG, PNG. Máximo: 5MB</div>
-            <div id="filePreview" class="file-preview"></div>
-          {% elif field.name == 'factory_year' or field.name == 'model_year' %}
-            <div class="help-text">Digite o ano com 4 dígitos</div>
+      <div class="form-group">
+        <label for="{{ field.id_for_label }}">
+          {{ field.label }}
+          {% if field.field.required %}
+          <span style="color: #e53e3e;">*</span>
           {% endif %}
+        </label>
 
-          <!-- Erros do campo -->
-          {% if field.errors %}
-            {% for error in field.errors %}
-              <div class="error-message">{{ error }}</div>
-            {% endfor %}
-          {% endif %}
-        </div>
+        {{ field }}
+
+        <!-- Help text específico por campo -->
+        {% if field.name == 'plate' %}
+        <div class="help-text">Ex: ABC-1234 ou ABC1D23</div>
+        {% elif field.name == 'value' %}
+        <div class="help-text">Valor em reais (R$)</div>
+        {% elif field.name == 'photo' %}
+        <div class="help-text">Formatos: JPG, PNG. Máximo: 5MB</div>
+        <div id="filePreview" class="file-preview"></div>
+        {% elif field.name == 'factory_year' or field.name == 'model_year' %}
+        <div class="help-text">Digite o ano com 4 dígitos</div>
+        {% endif %}
+
+        <!-- Erros do campo -->
+        {% if field.errors %}
+        {% for error in field.errors %}
+        <div class="error-message">{{ error }}</div>
+        {% endfor %}
+        {% endif %}
+      </div>
       {% endfor %}
 
       <div class="form-actions">
@@ -232,7 +232,7 @@
 </div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', function () {
     // Adicionar classes aos inputs do Django
     const inputs = document.querySelectorAll('input, select, textarea');
     inputs.forEach(input => {
@@ -244,9 +244,9 @@
     // Preview de arquivo selecionado
     const fileInput = document.querySelector('input[type="file"]');
     const filePreview = document.getElementById('filePreview');
-    
+
     if (fileInput && filePreview) {
-      fileInput.addEventListener('change', function(e) {
+      fileInput.addEventListener('change', function (e) {
         const fileName = e.target.files[0]?.name;
         if (fileName) {
           filePreview.textContent = `✓ Arquivo selecionado: ${fileName}`;
@@ -259,10 +259,10 @@
     // Validação de ano
     const yearInputs = document.querySelectorAll('input[name*="year"]');
     yearInputs.forEach(input => {
-      input.addEventListener('input', function(e) {
+      input.addEventListener('input', function (e) {
         const value = e.target.value;
         const currentYear = new Date().getFullYear();
-        
+
         if (value && (value < 1900 || value > currentYear + 1)) {
           e.target.style.borderColor = '#e53e3e';
         } else {
@@ -274,7 +274,7 @@
     // Formatação de valor monetário
     const valueInput = document.querySelector('input[name="value"]');
     if (valueInput) {
-      valueInput.addEventListener('blur', function(e) {
+      valueInput.addEventListener('blur', function (e) {
         const value = parseFloat(e.target.value);
         if (!isNaN(value) && value > 0) {
           e.target.value = value.toFixed(2);

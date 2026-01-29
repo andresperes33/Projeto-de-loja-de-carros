@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, CreateView
 from django.urls import reverse_lazy
 from cars.models import Car
@@ -31,3 +31,8 @@ class NewCarCreateView(CreateView):
         context = super().get_context_data(**kwargs)
         context['new_car_form'] = context.pop('form')
         return context
+
+
+def car_detail_view(request, pk):
+    car = get_object_or_404(Car, pk=pk)
+    return render(request, 'car_detail.html', {'car': car})
