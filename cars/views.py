@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
-from django.views.generic import ListView
+from django.views.generic import ListView, CreateView
+from django.urls import reverse_lazy
 from cars.models import Car
 from .forms import CarModelForm
 
@@ -19,19 +20,14 @@ class CarsListView(ListView):
         return queryset
 
 
+class NewCarCreateView(CreateView):
+    model = Car
+    form_class = CarModelForm
+    template_name = 'new_car.html'
+    success_url = reverse_lazy('cars_list')
+    context_object_name = 'new_car_form'
     
-
-def new_car_view(request):
-    if request.method == 'POST':
-        new_car_form = CarModelForm(request.POST, request.FILES)
-        if new_car_form.is_valid():
-            new_car_form.save()
-            return redirect('cars_list')
-    else:
-        new_car_form = CarModelForm()
-
-    return render(request, 'new_car.html', {'new_car_form': new_car_form})
-
-
-
-    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['new_car_form'] = context.pop('form')
+        return context
