@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import ListView, CreateView
+from django.views.generic import ListView, CreateView, UpdateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from cars.models import Car
 from .forms import CarModelForm
@@ -31,6 +32,14 @@ class NewCarCreateView(CreateView):
         context = super().get_context_data(**kwargs)
         context['new_car_form'] = context.pop('form')
         return context
+
+
+class CarUpdateView(LoginRequiredMixin, UpdateView):
+    model = Car
+    form_class = CarModelForm
+    template_name = 'car_update.html'
+    success_url = reverse_lazy('cars_list')
+    login_url = 'login'
 
 
 def car_detail_view(request, pk):
