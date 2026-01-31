@@ -21,12 +21,15 @@ class CarsListView(ListView):
         return queryset
 
 
-class NewCarCreateView(CreateView):
+class NewCarCreateView(LoginRequiredMixin, CreateView):
     model = Car
     form_class = CarModelForm
     template_name = 'new_car.html'
     success_url = reverse_lazy('cars_list')
     context_object_name = 'new_car_form'
+    login_url = 'login'
+    
+    
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
