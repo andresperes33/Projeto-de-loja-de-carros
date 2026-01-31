@@ -26,7 +26,10 @@ def car_post_save(sender, instance, created, **kwargs):
 def car_post_delete(sender, instance, **kwargs):
     car_inventory_update()
 
+from cars.openai_api import get_car_ai_bio
+
 @receiver(pre_save, sender=Car)
 def car_pre_save(sender, instance, **kwargs):
     if not instance.bio:
-        instance.bio = f'Este {instance.brand} {instance.model} de {instance.factory_year} está em excelente estado de conservação. Veículo completo e revisado, pronto para uso. Entre em contato conosco para mais informações, agendar uma visita ou realizar um test-drive.'
+        ai_bio = get_car_ai_bio(instance.model, instance.brand, instance.factory_year)
+        instance.bio = ai_bio

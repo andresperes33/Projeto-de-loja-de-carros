@@ -27,10 +27,12 @@ class NewCarCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Car
     form_class = CarModelForm
     template_name = 'new_car.html'
-    success_url = reverse_lazy('cars_list')
     context_object_name = 'new_car_form'
     login_url = 'login'
     success_message = 'Carro cadastrado com sucesso!'
+    
+    def get_success_url(self):
+        return reverse_lazy('car_detail', kwargs={'pk': self.object.pk})
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
