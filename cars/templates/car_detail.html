@@ -344,12 +344,18 @@
 
             <!-- Botões de Ação -->
             <div class="action-buttons">
+                {% if not user.is_authenticated %}
                 <a href="#" class="btn btn-primary">
                     💬 Entrar em Contato
                 </a>
+                {% endif %}
                 {% if user.is_authenticated %}
                 <a href="{% url 'car_update' car.pk %}" class="btn btn-secondary">
                     ✏️ Editar
+                </a>
+                <a href="{% url 'car_delete' car.pk %}" class="btn btn-delete"
+                    style="background-color: #e53e3e; color: white; border: none;">
+                    🗑️ Excluir
                 </a>
                 {% endif %}
                 <a href="{% url 'cars_list' %}" class="btn btn-secondary">

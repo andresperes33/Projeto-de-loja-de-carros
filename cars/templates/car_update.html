@@ -4,158 +4,248 @@
 
 {% block content %}
 <style>
+    :root {
+        --primary-color: #667eea;
+        --secondary-color: #764ba2;
+        --text-color: #2d3748;
+        --text-light: #718096;
+        --bg-color: #f7fafc;
+        --card-bg: #ffffff;
+        --border-color: #e2e8f0;
+        --input-focus-shadow: rgba(102, 126, 234, 0.25);
+    }
+
+    body {
+        background-color: var(--bg-color);
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
     .form-container {
-        max-width: 600px;
-        margin: 60px auto;
+        max-width: 900px;
+        margin: 40px auto;
         padding: 20px;
+        animation: fadeIn 0.5s ease-out;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
     .form-header {
         text-align: center;
-        margin-bottom: 30px;
+        margin-bottom: 40px;
     }
 
     .form-header h1 {
-        font-size: 28px;
-        font-weight: 700;
-        color: #2d3748;
-        margin-bottom: 8px;
+        font-size: 32px;
+        font-weight: 800;
+        color: var(--text-color);
+        margin-bottom: 12px;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
     }
 
     .form-header p {
-        font-size: 14px;
-        color: #718096;
+        font-size: 16px;
+        color: var(--text-light);
     }
 
     .form-card {
-        background: white;
+        background: var(--card-bg);
         padding: 40px;
-        border-radius: 12px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 20px;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        border: 1px solid white;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+    }
+
+    .full-width {
+        grid-column: 1 / -1;
     }
 
     .form-group {
-        margin-bottom: 20px;
+        margin-bottom: 24px;
+        position: relative;
     }
 
     .form-group label {
         display: block;
         font-weight: 600;
-        color: #2d3748;
-        margin-bottom: 6px;
+        color: var(--text-color);
+        margin-bottom: 8px;
         font-size: 14px;
+        letter-spacing: 0.02em;
+    }
+
+    .input-wrapper {
+        position: relative;
     }
 
     .form-group input,
     .form-group select,
     .form-group textarea {
         width: 100%;
-        padding: 12px 14px;
-        border: 1px solid #cbd5e0;
-        border-radius: 6px;
+        padding: 14px 16px;
+        border: 2px solid var(--border-color);
+        border-radius: 12px;
         font-size: 15px;
-        font-family: inherit;
-        transition: all 0.2s;
+        background-color: #f8fafc;
+        transition: all 0.3s ease;
+        color: var(--text-color);
     }
 
     .form-group input:focus,
     .form-group select:focus,
     .form-group textarea:focus {
         outline: none;
-        border-color: #667eea;
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        border-color: var(--primary-color);
+        background-color: #fff;
+        box-shadow: 0 0 0 4px var(--input-focus-shadow);
     }
 
-    .form-group input[type="file"] {
-        padding: 10px;
-        cursor: pointer;
+    .form-group input:hover,
+    .form-group select:hover {
+        border-color: #cbd5e0;
     }
 
     .help-text {
         font-size: 12px;
-        color: #718096;
-        margin-top: 4px;
+        color: var(--text-light);
+        margin-top: 6px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
     }
 
     .error-message {
         color: #e53e3e;
         font-size: 13px;
-        margin-top: 4px;
+        margin-top: 6px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-weight: 500;
     }
 
-    .alert-error {
-        background-color: #fed7d7;
-        color: #c53030;
-        padding: 12px 16px;
-        border-radius: 6px;
-        margin-bottom: 20px;
-        font-size: 14px;
-        border-left: 4px solid #e53e3e;
+    /* Custom File Input */
+    .file-input-container {
+        position: relative;
+        border: 2px dashed #cbd5e0;
+        border-radius: 16px;
+        padding: 30px;
+        text-align: center;
+        transition: all 0.3s ease;
+        background: #f8fafc;
+        cursor: pointer;
     }
 
-    .alert-success {
-        background-color: #c6f6d5;
-        color: #22543d;
-        padding: 12px 16px;
-        border-radius: 6px;
-        margin-bottom: 20px;
-        font-size: 14px;
-        border-left: 4px solid #38a169;
+    .file-input-container:hover {
+        border-color: var(--primary-color);
+        background: #f0f4ff;
+    }
+
+    .file-input-container input[type="file"] {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    .file-preview-area {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .current-image-preview {
+        width: 120px;
+        height: 120px;
+        border-radius: 12px;
+        object-fit: cover;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-bottom: 10px;
+    }
+
+    .icon-upload {
+        font-size: 32px;
+        color: var(--primary-color);
+        margin-bottom: 8px;
     }
 
     .form-actions {
         display: flex;
-        gap: 12px;
-        margin-top: 30px;
-        padding-top: 20px;
-        border-top: 1px solid #e2e8f0;
+        gap: 16px;
+        margin-top: 40px;
+        padding-top: 30px;
+        border-top: 1px solid var(--border-color);
     }
 
     .btn {
         flex: 1;
-        padding: 14px 24px;
-        font-size: 15px;
+        padding: 16px 24px;
+        font-size: 16px;
         font-weight: 600;
-        border-radius: 6px;
+        border-radius: 12px;
         cursor: pointer;
         border: none;
         text-align: center;
         text-decoration: none;
-        display: inline-block;
-        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .btn-primary {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
         color: white;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
     }
 
     .btn-primary:hover {
         transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.5);
     }
 
     .btn-secondary {
         background: white;
-        color: #4a5568;
-        border: 2px solid #e2e8f0;
+        color: var(--text-color);
+        border: 2px solid var(--border-color);
     }
 
     .btn-secondary:hover {
-        background: #f7fafc;
+        background: #f8fafc;
         border-color: #cbd5e0;
-    }
-
-    .file-preview {
-        margin-top: 8px;
-        font-size: 13px;
-        color: #38a169;
-        font-weight: 600;
+        transform: translateY(-2px);
     }
 
     @media (max-width: 768px) {
+        .form-grid {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
         .form-card {
-            padding: 30px 20px;
+            padding: 24px;
         }
 
         .form-header h1 {
@@ -170,15 +260,16 @@
 
 <div class="form-container">
     <div class="form-header">
-        <h1>✏️ Editar Carro</h1>
-        <p>Atualize as informações do veículo</p>
+        <h1>✏️ Editar Veículo</h1>
+        <p>Atualize as informações do {{ form.instance.brand }} {{ form.instance.model }}</p>
     </div>
 
     <div class="form-card">
-        <!-- Mensagens de sucesso/erro -->
+        <!-- Mensagens -->
         {% if messages %}
         {% for message in messages %}
-        <div class="alert-{{ message.tags }}">
+        <div class="alert-{{ message.tags }}"
+            style="padding: 15px; border-radius: 10px; margin-bottom: 20px; background: #e6fffa; color: #2c7a7b; border: 1px solid #b2f5ea;">
             {{ message }}
         </div>
         {% endfor %}
@@ -187,48 +278,101 @@
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
 
-            {% for field in form %}
-            <div class="form-group">
-                <label for="{{ field.id_for_label }}">
-                    {{ field.label }}
-                    {% if field.field.required %}
-                    <span style="color: #e53e3e;">*</span>
-                    {% endif %}
-                </label>
+            <!-- Campos Ocultos (se houver errors que não são de campo) -->
+            {% if form.non_field_errors %}
+            <div class="alert-error">
+                {{ form.non_field_errors }}
+            </div>
+            {% endif %}
 
-                {{ field }}
-
-                <!-- Help text específico por campo -->
-                {% if field.name == 'plate' %}
-                <div class="help-text">Ex: ABC-1234 ou ABC1D23</div>
-                {% elif field.name == 'value' %}
-                <div class="help-text">Valor em reais (R$)</div>
-                {% elif field.name == 'photo' %}
-                <div class="help-text">Formatos: JPG, PNG. Máximo: 5MB</div>
-                <div id="filePreview" class="file-preview">
-                    {% if field.value %}
-                    Atualmente: {{ field.value.url }}
+            <div class="form-grid">
+                <!-- Info Básica (Esquerda/Topo) -->
+                <div class="form-group">
+                    <label for="{{ form.brand.id_for_label }}">Marca</label>
+                    {{ form.brand }}
+                    {% if form.brand.errors %}
+                    <div class="error-message">⚠️ {{ form.brand.errors.0 }}</div>
                     {% endif %}
                 </div>
-                {% elif field.name == 'factory_year' or field.name == 'model_year' %}
-                <div class="help-text">Digite o ano com 4 dígitos</div>
-                {% endif %}
 
-                <!-- Erros do campo -->
-                {% if field.errors %}
-                {% for error in field.errors %}
-                <div class="error-message">{{ error }}</div>
-                {% endfor %}
-                {% endif %}
+                <div class="form-group">
+                    <label for="{{ form.model.id_for_label }}">Modelo</label>
+                    {{ form.model }}
+                    {% if form.model.errors %}
+                    <div class="error-message">⚠️ {{ form.model.errors.0 }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Anos (Lado a Lado) -->
+                <div class="form-group">
+                    <label for="{{ form.factory_year.id_for_label }}">Ano de Fabricação</label>
+                    {{ form.factory_year }}
+                    <div class="help-text">📅 Formato: AAAA</div>
+                    {% if form.factory_year.errors %}
+                    <div class="error-message">⚠️ {{ form.factory_year.errors.0 }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.model_year.id_for_label }}">Ano do Modelo</label>
+                    {{ form.model_year }}
+                    <div class="help-text">📅 Formato: AAAA</div>
+                    {% if form.model_year.errors %}
+                    <div class="error-message">⚠️ {{ form.model_year.errors.0 }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Placa e Valor -->
+                <div class="form-group">
+                    <label for="{{ form.plate.id_for_label }}">Placa</label>
+                    {{ form.plate }}
+                    <div class="help-text">🔤 Ex: ABC-1234</div>
+                    {% if form.plate.errors %}
+                    <div class="error-message">⚠️ {{ form.plate.errors.0 }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.value.id_for_label }}">Valor (R$)</label>
+                    {{ form.value }}
+                    {% if form.value.errors %}
+                    <div class="error-message">⚠️ {{ form.value.errors.0 }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Foto (Largura Total) -->
+                <div class="form-group full-width">
+                    <label>Foto do Veículo</label>
+                    <div class="file-input-container">
+                        {{ form.photo }}
+                        <div class="file-preview-area">
+                            {% if form.instance.photo %}
+                            <img src="{{ form.instance.photo.url }}" class="current-image-preview" id="currentInfoImg">
+                            <span style="font-size: 14px; font-weight: 500; color: #4a5568" id="uploadText">
+                                Clique para alterar a foto
+                            </span>
+                            {% else %}
+                            <span class="icon-upload">📷</span>
+                            <span style="font-size: 14px; font-weight: 500; color: #4a5568" id="uploadText">
+                                Clique ou arraste para enviar uma foto
+                            </span>
+                            {% endif %}
+                            <span id="fileName"
+                                style="font-size: 13px; color: var(--primary-color); font-weight: 600;"></span>
+                        </div>
+                    </div>
+                    {% if form.photo.errors %}
+                    <div class="error-message">⚠️ {{ form.photo.errors.0 }}</div>
+                    {% endif %}
+                </div>
             </div>
-            {% endfor %}
 
             <div class="form-actions">
-                <a href="{% url 'cars_list' %}" class="btn btn-secondary">
-                    ← Cancelar
+                <a href="{% url 'car_detail' form.instance.pk %}" class="btn btn-secondary">
+                    ❌ Cancelar
                 </a>
                 <button type="submit" class="btn btn-primary">
-                    ✓ Salvar Alterações
+                    💾 Salvar Alterações
                 </button>
             </div>
         </form>
@@ -237,59 +381,54 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // Adicionar classes aos inputs do Django
-        const inputs = document.querySelectorAll('input, select, textarea');
+        // Melhorar inputs
+        const inputs = document.querySelectorAll('input:not([type="checkbox"]):not([type="radio"]):not([type="file"]), select, textarea');
         inputs.forEach(input => {
-            if (input.type !== 'hidden' && input.type !== 'submit') {
-                input.style.width = '100%';
-            }
+            // Remover estilos inline antigos se houver
+            input.style.width = '100%';
         });
 
         // Preview de arquivo selecionado
         const fileInput = document.querySelector('input[type="file"]');
-        const filePreview = document.getElementById('filePreview');
+        const fileNameDisplay = document.getElementById('fileName');
+        const uploadText = document.getElementById('uploadText');
+        const currentImg = document.getElementById('currentInfoImg');
 
-        if (fileInput && filePreview) {
+        if (fileInput) {
             fileInput.addEventListener('change', function (e) {
-                const fileName = e.target.files[0]?.name;
-                if (fileName) {
-                    filePreview.textContent = `✓ Arquivo selecionado: ${fileName}`;
+                const file = e.target.files[0];
+                if (file) {
+                    fileNameDisplay.textContent = `✓ Selecionado: ${file.name}`;
+                    uploadText.textContent = "Foto atualizada (Salve para confirmar)";
+
+                    // Preview imediato da nova imagem (opcional)
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        if (currentImg) {
+                            currentImg.src = e.target.result;
+                        } else {
+                            // Se não tinha imagem antes, criar uma tag img temporária seria o ideal
+                            // mas para simplificar, apenas mostramos o nome
+                        }
+                    }
+                    reader.readAsDataURL(file);
+
                 } else {
-                    // Reset to initial state if needed, or leave empty
+                    fileNameDisplay.textContent = '';
+                    uploadText.textContent = currentImg ? "Clique para alterar a foto" : "Clique ou arraste para enviar uma foto";
                 }
             });
         }
 
-        // Validação de ano
-        const yearInputs = document.querySelectorAll('input[name*="year"]');
-        yearInputs.forEach(input => {
-            input.addEventListener('input', function (e) {
-                const value = e.target.value;
-                const currentYear = new Date().getFullYear();
-
-                if (value && (value < 1900 || value > currentYear + 1)) {
-                    e.target.style.borderColor = '#e53e3e';
-                } else {
-                    e.target.style.borderColor = '#cbd5e0';
-                }
-            });
-        });
-
-        // Formatação de valor monetário
+        // Auto-formatação simples de moeda
         const valueInput = document.querySelector('input[name="value"]');
         if (valueInput) {
-            valueInput.addEventListener('blur', function (e) {
-                const value = parseFloat(e.target.value);
-                if (!isNaN(value) && value > 0) {
-                    e.target.value = value.toFixed(2);
+            valueInput.addEventListener('change', function (e) {
+                let val = parseFloat(e.target.value);
+                if (!isNaN(val)) {
+                    e.target.value = val.toFixed(2);
                 }
             });
-        }
-
-        // Focar no primeiro campo
-        const firstInput = document.querySelector('.form-group input:not([type="hidden"])');
-        if (firstInput) {
-            firstInput.focus();
         }
     });
 </script>

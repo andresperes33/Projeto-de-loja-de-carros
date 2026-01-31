@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import ListView, CreateView, UpdateView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from cars.models import Car
@@ -38,6 +38,15 @@ class CarUpdateView(LoginRequiredMixin, UpdateView):
     model = Car
     form_class = CarModelForm
     template_name = 'car_update.html'
+    login_url = 'login'
+
+    def get_success_url(self):
+        return reverse_lazy('car_detail', kwargs={'pk': self.object.pk})
+
+
+class CarDeleteView(LoginRequiredMixin, DeleteView):
+    model = Car
+    template_name = 'car_confirm_delete.html'
     success_url = reverse_lazy('cars_list')
     login_url = 'login'
 
