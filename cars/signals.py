@@ -25,3 +25,8 @@ def car_post_save(sender, instance, created, **kwargs):
 @receiver(post_delete, sender=Car)
 def car_post_delete(sender, instance, **kwargs):
     car_inventory_update()
+
+@receiver(pre_save, sender=Car)
+def car_pre_save(sender, instance, **kwargs):
+    if not instance.bio:
+        instance.bio = f'Este {instance.brand} {instance.model} de {instance.factory_year} está em excelente estado de conservação. Veículo completo e revisado, pronto para uso. Entre em contato conosco para mais informações, agendar uma visita ou realizar um test-drive.'

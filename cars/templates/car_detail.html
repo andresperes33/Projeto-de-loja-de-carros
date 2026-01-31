@@ -371,9 +371,13 @@
             📋 Sobre este veículo
         </h2>
         <p class="description-text">
+            {% if car.bio %}
+            {{ car.bio|linebreaks }}
+            {% else %}
             Este {{ car.brand }} {{ car.model }} de {{ car.factory_year }} está em excelente estado de conservação.
             Veículo completo e revisado, pronto para uso. Entre em contato conosco para mais informações,
             agendar uma visita ou realizar um test-drive.
+            {% endif %}
         </p>
 
         <div class="features-list">

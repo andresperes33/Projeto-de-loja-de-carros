@@ -340,6 +340,16 @@
                     {% endif %}
                 </div>
 
+                <!-- Bio (Largura Total) -->
+                <div class="form-group full-width">
+                    <label for="{{ form.bio.id_for_label }}">Descrição do Veículo</label>
+                    {{ form.bio }}
+                    <div class="help-text">📝 Opcional: Detalhes sobre o estado, acessórios, revisões, etc.</div>
+                    {% if form.bio.errors %}
+                    <div class="error-message">⚠️ {{ form.bio.errors.0 }}</div>
+                    {% endif %}
+                </div>
+
                 <!-- Foto (Largura Total) -->
                 <div class="form-group full-width">
                     <label>Foto do Veículo</label>
