@@ -26,7 +26,7 @@ def car_post_save(sender, instance, created, **kwargs):
 def car_post_delete(sender, instance, **kwargs):
     car_inventory_update()
 
-from cars.openai_api import get_car_ai_bio
+from cars.utils import get_car_ai_bio
 
 @receiver(pre_save, sender=Car)
 def car_pre_save(sender, instance, **kwargs):
