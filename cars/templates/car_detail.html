@@ -237,37 +237,49 @@
     }
 
     @media (max-width: 968px) {
+        .detail-container {
+            padding: 20px 16px;
+        }
+
         .detail-grid {
             grid-template-columns: 1fr;
+            border-radius: 16px;
         }
 
         .image-section {
-            min-height: 400px;
+            min-height: 300px;
+            max-height: 400px;
         }
 
         .info-section {
-            padding: 30px 20px;
+            padding: 32px 24px;
         }
 
         .car-title {
             font-size: 28px;
+            margin-bottom: 16px;
         }
 
         .car-price {
             font-size: 32px;
+            margin-bottom: 24px;
         }
 
         .specs-grid {
-            grid-template-columns: 1fr;
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 20px;
+            padding: 24px 0;
         }
 
         .action-buttons {
             flex-direction: column;
+            gap: 12px;
         }
 
         .description-section {
-            padding: 30px 20px;
+            padding: 32px 24px;
+            margin-top: 24px;
+            border-radius: 16px;
         }
     }
 
@@ -317,10 +329,11 @@
         </div>
 
         <!-- Seção de Informações -->
+        {% load car_filters %}
         <div class="info-section">
             <div class="car-brand-label">{{ car.brand }}</div>
             <h1 class="car-title">{{ car.model }}</h1>
-            <div class="car-price">R$ {{ car.value|floatformat:2 }}</div>
+            <div class="car-price">{{ car.value|currency }}</div>
 
             <!-- Especificações -->
             <div class="specs-grid">

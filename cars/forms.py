@@ -7,6 +7,9 @@ class CarModelForm(forms.ModelForm):
     class Meta:
         model = Car
         fields = '__all__'
+        widgets = {
+            'value': forms.TextInput(),
+        }
 
     def clean_value(self):
         value = self.cleaned_data.get('value')

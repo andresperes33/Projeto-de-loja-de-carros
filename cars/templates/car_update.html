@@ -431,15 +431,41 @@
             });
         }
 
-        // Auto-formatação simples de moeda
+        // Formatação de valor monetário (Máscara R$)
         const valueInput = document.querySelector('input[name="value"]');
         if (valueInput) {
-            valueInput.addEventListener('change', function (e) {
-                let val = parseFloat(e.target.value);
-                if (!isNaN(val)) {
-                    e.target.value = val.toFixed(2);
-                }
+            // Se já houver um valor (ex: ao editar), formatar inicialmente
+            if (valueInput.value) {
+                formatCurrency(valueInput);
+            }
+
+            valueInput.addEventListener('input', function (e) {
+                formatCurrency(e.target);
             });
+
+            // Antes de enviar o formulário, remover a formatação para que o Django aceite como float
+            const form = valueInput.closest('form');
+            form.addEventListener('submit', function () {
+                const rawValue = valueInput.value
+                    .replace("R$ ", "")
+                    .replace(/\./g, "")
+                    .replace(",", ".");
+                valueInput.value = rawValue;
+            });
+        }
+
+        function formatCurrency(input) {
+            let value = input.value.replace(/\D/g, "");
+            if (value === "") {
+                input.value = "";
+                return;
+            }
+
+            value = (parseInt(value) / 100).toFixed(2);
+            let parts = value.split(".");
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+            input.value = "R$ " + parts.join(",");
         }
     });
 </script>
