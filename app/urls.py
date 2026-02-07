@@ -19,7 +19,7 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import RedirectView
-from cars.views import CarsListView, NewCarCreateView, car_detail_view, CarUpdateView, CarDeleteView
+from cars.views import CarsListView, NewCarCreateView, car_detail_view, CarUpdateView, CarDeleteView, about_view, contact_view
 from accounts.views import register_view, login_view, logout_view
 
 from django.views.static import serve
@@ -36,6 +36,8 @@ urlpatterns = [
     path('car/<int:pk>/', car_detail_view, name='car_detail'),
     path('car/<int:pk>/update/', CarUpdateView.as_view(), name='car_update'),
     path('car/<int:pk>/delete/', CarDeleteView.as_view(), name='car_delete'),
+    path('about/', about_view, name='about'),
+    path('contact/', contact_view, name='contact'),
 ]
 
 # Servir arquivos de mídia em produção (Easypanel)

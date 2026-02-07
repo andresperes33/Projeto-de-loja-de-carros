@@ -447,8 +447,8 @@
 
       <ul id="navMenu">
         <li><a href="{% url 'cars_list' %}">Carros</a></li>
-        <li><a href="#">Sobre</a></li>
-        <li><a href="#">Contato</a></li>
+        <li><a href="{% url 'about' %}">Sobre</a></li>
+        <li><a href="{% url 'contact' %}">Contato</a></li>
 
         {% if user.is_authenticated %}
         <li class="nav-divider"></li>
@@ -521,7 +521,7 @@
       <div class="footer-section">
         <h3>ℹ️ Institucional</h3>
         <ul>
-          <li><a href="#">→ Sobre Nós</a></li>
+          <li><a href="{% url 'about' %}">→ Sobre Nós</a></li>
           <li><a href="#">→ Nossa História</a></li>
           <li><a href="#">→ Trabalhe Conosco</a></li>
           <li><a href="#">→ Política de Privacidade</a></li>

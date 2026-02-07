@@ -65,3 +65,10 @@ class CarDeleteView(LoginRequiredMixin, DeleteView):
 def car_detail_view(request, pk):
     car = get_object_or_404(Car, pk=pk)
     return render(request, 'car_detail.html', {'car': car})
+
+def about_view(request):
+    return render(request, 'about.html')
+
+
+def contact_view(request):
+    return render(request, 'contact.html')

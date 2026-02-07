@@ -1,0 +1,251 @@
+{% extends 'base.html' %}
+
+{% block title %}Sobre Nós - Andrécode.py Multimarcas{% endblock %}
+
+{% block content %}
+<style>
+    .about-container {
+        max-width: 1200px;
+        margin: 60px auto;
+        padding: 0 20px;
+    }
+
+    .about-hero {
+        text-align: center;
+        margin-bottom: 80px;
+        animation: fadeInDown 0.8s ease-out;
+    }
+
+    .about-hero h1 {
+        font-size: 48px;
+        font-weight: 800;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 20px;
+    }
+
+    .about-hero p {
+        font-size: 20px;
+        color: #718096;
+        max-width: 800px;
+        margin: 0 auto;
+        line-height: 1.6;
+    }
+
+    .about-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        align-items: center;
+        margin-bottom: 100px;
+    }
+
+    .about-image {
+        position: relative;
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        animation: fadeInLeft 1s ease-out;
+    }
+
+    .about-image img {
+        width: 100%;
+        display: block;
+        transition: transform 0.5s;
+    }
+
+    .about-image:hover img {
+        transform: scale(1.05);
+    }
+
+    .about-text {
+        animation: fadeInRight 1s ease-out;
+    }
+
+    .about-text h2 {
+        font-size: 32px;
+        font-weight: 700;
+        color: #2d3748;
+        margin-bottom: 24px;
+        position: relative;
+    }
+
+    .about-text h2::after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 0;
+        width: 60px;
+        height: 4px;
+        background: #667eea;
+        border-radius: 2px;
+    }
+
+    .about-text p {
+        font-size: 17px;
+        line-height: 1.8;
+        color: #4a5568;
+        margin-bottom: 20px;
+    }
+
+    .values-section {
+        background: white;
+        padding: 80px 40px;
+        border-radius: 32px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        margin-bottom: 80px;
+    }
+
+    .values-title {
+        text-align: center;
+        margin-bottom: 60px;
+    }
+
+    .values-title h2 {
+        font-size: 36px;
+        color: #2d3748;
+    }
+
+    .values-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 40px;
+    }
+
+    .value-card {
+        padding: 40px;
+        background: #f8f9fa;
+        border-radius: 20px;
+        transition: all 0.3s ease;
+        border: 1px solid #edf2f7;
+    }
+
+    .value-card:hover {
+        transform: translateY(-10px);
+        background: white;
+        box-shadow: 0 15px 35px rgba(102, 126, 234, 0.1);
+        border-color: #667eea;
+    }
+
+    .value-icon {
+        font-size: 40px;
+        margin-bottom: 20px;
+        display: inline-block;
+    }
+
+    .value-card h3 {
+        font-size: 20px;
+        color: #2d3748;
+        margin-bottom: 15px;
+    }
+
+    .value-card p {
+        font-size: 15px;
+        color: #718096;
+        line-height: 1.6;
+    }
+
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes fadeInLeft {
+        from {
+            opacity: 0;
+            transform: translateX(-50px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes fadeInRight {
+        from {
+            opacity: 0;
+            transform: translateX(50px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    @media (max-width: 968px) {
+        .about-grid {
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
+
+        .about-hero h1 {
+            font-size: 36px;
+        }
+
+        .about-hero p {
+            font-size: 18px;
+        }
+    }
+</style>
+
+<div class="about-container">
+    <div class="about-hero">
+        <h1>Sua Jornada Automotiva Começa Aqui</h1>
+        <p>A Andrécode.py Multimarcas é mais que uma loja de carros; somos seu parceiro na realização de sonhos e na
+            conquista de novas estradas.</p>
+    </div>
+
+    <div class="about-grid">
+        <div class="about-image">
+            <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+                alt="Showroom Andrécode.py">
+        </div>
+        <div class="about-text">
+            <h2>Nossa História</h2>
+            <p>Fundada com a visão de transformar o mercado de seminovos, a Andrécode.py Multimarcas nasceu da paixão
+                por automóveis e tecnologia. Buscamos oferecer uma experiência transparente, segura e digital.</p>
+            <p>Desde o nosso primeiro dia, focamos em curadoria de qualidade. Cada veículo em nosso estoque passa por um
+                rigoroso processo de vistoria e certificação, garantindo que você leve para casa apenas o melhor do
+                mercado.</p>
+            <p>Com anos de experiência e milhares de clientes satisfeitos, continuamos inovando para que a compra do seu
+                próximo carro seja tão emocionante quanto a primeira volta nele.</p>
+        </div>
+    </div>
+
+    <div class="values-section">
+        <div class="values-title">
+            <h2>Nossos Valores</h2>
+        </div>
+        <div class="values-grid">
+            <div class="value-card">
+                <span class="value-icon">💎</span>
+                <h3>Transparência Total</h3>
+                <p>Acreditamos em negociações claras. Fornecemos todo o histórico e laudo cautelar de cada veículo sem
+                    letras miúdas.</p>
+            </div>
+            <div class="value-card">
+                <span class="value-icon">🛡️</span>
+                <h3>Segurança Máxima</h3>
+                <p>Todas as transações são protegidas e acompanhadas por especialistas, garantindo tranquilidade do
+                    início ao fim.</p>
+            </div>
+            <div class="value-card">
+                <span class="value-icon">⭐</span>
+                <h3>Excelência</h3>
+                <p>Nosso padrão de qualidade é inegociável. Só vendemos carros que nós mesmos gostaríamos de dirigir.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
