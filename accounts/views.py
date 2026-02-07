@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
+from django.conf import settings
+import urllib.request
+import urllib.parse
 
 
 def register_view(request):
@@ -8,8 +11,20 @@ def register_view(request):
         user_form = UserCreationForm(request.POST)
 
         if user_form.is_valid():
-            user_form.save()
-            return redirect('login')  # temporário
+            user = user_form.save()
+            
+            # Notificação Telegram
+            if settings.TELEGRAM_BOT_TOKEN and settings.TELEGRAM_CHAT_ID:
+                try:
+                    text = f"👤 *Novo Usuário Cadastrado!*\n\n*Username:* {user.username}\n*E-mail:* {user.email if user.email else 'Não informado'}"
+                    url = f"https://api.telegram.org/bot{settings.TELEGRAM_BOT_TOKEN}/sendMessage"
+                    data = urllib.parse.urlencode({'chat_id': settings.TELEGRAM_CHAT_ID, 'text': text, 'parse_mode': 'Markdown'}).encode()
+                    req = urllib.request.Request(url, data=data)
+                    urllib.request.urlopen(req)
+                except Exception:
+                    pass
+            
+            return redirect('login')
    else:
         user_form = UserCreationForm()
     
