@@ -102,18 +102,36 @@ def contact_view(request):
                 try:
                     text = f"🚗 *Novo Contato no Site!*\n\n*Nome:* {message_obj.name}\n*E-mail:* {message_obj.email}\n*Assunto:* {message_obj.subject}\n\n*Mensagem:* {message_obj.message}"
                     
-                    # Formata a URL da Evolution API
                     base_url = settings.WHATSAPP_BASE_URL.rstrip('/')
                     url = f"{base_url}/message/sendText/{settings.WHATSAPP_INSTANCE}"
                     
+                    # Evolution API prefere o número com o sufixo @s.whatsapp.net em algumas versões
+                    number = settings.WHATSAPP_NUMBER
+                    if not number.endswith('@s.whatsapp.net'):
+                        # Remove caracteres não numéricos apenas por segurança
+                        number = ''.join(filter(str.isdigit, number))
+                    
+                    payload = {
+                        "number": number,
+                        "options": {
+                            "delay": 1200,
+                            "presence": "composing",
+                            "linkPreview": False
+                        },
+                        "textMessage": {
+                            "text": text
+                        }
+                    }
+                    
+                    # Algumas versões usam 'text' direto, outras 'textMessage'. Vamos usar o padrão mais comum:
                     data = json.dumps({
-                        'number': settings.WHATSAPP_NUMBER,
+                        'number': number,
                         'text': text
                     }).encode('utf-8')
                     
                     req = urllib.request.Request(url, data=data, method='POST')
                     req.add_header('Content-Type', 'application/json')
-                    req.add_header('apikey', settings.WHATSAPP_TOKEN) # Evolution API usa apikey no header
+                    req.add_header('apikey', settings.WHATSAPP_TOKEN)
                     urllib.request.urlopen(req)
                 except Exception:
                     pass

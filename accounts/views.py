@@ -30,18 +30,21 @@ def register_view(request):
                 try:
                     text = f"👤 *Novo Usuário Cadastrado!*\n\n*Username:* {user.username}\n*E-mail:* {user.email if user.email else 'Não informado'}"
                     
-                    # Formata a URL da Evolution API
                     base_url = settings.WHATSAPP_BASE_URL.rstrip('/')
                     url = f"{base_url}/message/sendText/{settings.WHATSAPP_INSTANCE}"
                     
+                    number = settings.WHATSAPP_NUMBER
+                    if not number.endswith('@s.whatsapp.net'):
+                        number = ''.join(filter(str.isdigit, number))
+
                     data = json.dumps({
-                        'number': settings.WHATSAPP_NUMBER,
+                        'number': number,
                         'text': text
                     }).encode('utf-8')
                     
                     req = urllib.request.Request(url, data=data, method='POST')
                     req.add_header('Content-Type', 'application/json')
-                    req.add_header('apikey', settings.WHATSAPP_TOKEN) # Evolution API usa apikey no header
+                    req.add_header('apikey', settings.WHATSAPP_TOKEN)
                     urllib.request.urlopen(req)
                 except Exception:
                     pass
