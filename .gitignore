@@ -1,7 +1,23 @@
+# Django
 .env
+db.sqlite3
+media/
+static/
+*.log
+
+# Python
 __pycache__/
 *.py[cod]
-db.sqlite3
+*$py.class
 venv/
+.venv/
+env/
+.env/
+
+# IDEs
+.vscode/
+.idea/
+
+# OS
 .DS_Store
-media/
+Thumbs.db
