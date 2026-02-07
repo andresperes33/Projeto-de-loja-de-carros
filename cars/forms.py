@@ -1,5 +1,5 @@
 from django import forms
-from .models import Car
+from .models import Car, Message
 
 
 
@@ -51,3 +51,8 @@ class CarModelForm(forms.ModelForm):
 
 
     
+
+class MessageForm(forms.ModelForm):
+    class Meta:
+        model = Message
+        fields = ['name', 'email', 'subject', 'message']

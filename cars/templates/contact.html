@@ -261,7 +261,7 @@
         </div>
 
         <div class="contact-form-wrapper">
-            <form class="contact-form" action="#" method="POST">
+            <form class="contact-form" action="{% url 'contact' %}" method="POST">
                 {% csrf_token %}
                 <h2>Envie uma Mensagem</h2>
 

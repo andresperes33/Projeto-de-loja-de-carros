@@ -5,7 +5,9 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
 from django.urls import reverse_lazy
 from cars.models import Car
-from .forms import CarModelForm
+from .forms import CarModelForm, MessageForm
+from django.core.mail import send_mail
+from django.conf import settings
 
 
 class CarsListView(ListView):
@@ -71,4 +73,31 @@ def about_view(request):
 
 
 def contact_view(request):
-    return render(request, 'contact.html')
+    if request.method == 'POST':
+        form = MessageForm(request.POST)
+        if form.is_valid():
+            # Salva no Banco de Dados
+            message_obj = form.save()
+            
+            # Prepara o e-mail
+            subject = f"Novo contato: {message_obj.subject}"
+            email_body = f"Nome: {message_obj.name}\nE-mail: {message_obj.email}\nAssunto: {message_obj.subject}\n\nMensagem:\n{message_obj.message}"
+            
+            try:
+                send_mail(
+                    subject,
+                    email_body,
+                    settings.EMAIL_HOST_USER, # Remetente
+                    [settings.EMAIL_HOST_USER], # Destinatário (você mesmo)
+                    fail_silently=False,
+                )
+                messages.success(request, 'Sua mensagem foi enviada com sucesso! Entraremos em contato em breve.')
+            except Exception:
+                # Mesmo se o e-mail falhar, já salvamos no banco de dados.
+                messages.success(request, 'Sua mensagem foi recebida e salva em nosso sistema. Obrigado!')
+            
+            return redirect('contact')
+    else:
+        form = MessageForm()
+    
+    return render(request, 'contact.html', {'form': form})
