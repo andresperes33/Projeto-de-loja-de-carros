@@ -87,8 +87,8 @@ def contact_view(request):
                 send_mail(
                     subject,
                     email_body,
-                    settings.EMAIL_HOST_USER, # Remetente
-                    [settings.EMAIL_HOST_USER], # Destinatário (você mesmo)
+                    settings.DEFAULT_FROM_EMAIL, # Remetente configurado
+                    [settings.NOTIFY_EMAIL], # Destinatário (seu e-mail)
                     fail_silently=False,
                 )
                 messages.success(request, 'Sua mensagem foi enviada com sucesso! Entraremos em contato em breve.')

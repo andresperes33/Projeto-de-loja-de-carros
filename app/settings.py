@@ -136,17 +136,18 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # EMAIL SETTINGS
-# Durante o desenvolvimento, as mensagens serão exibidas no terminal (console)
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# Se as variáveis de ambiente estiverem definidas, usa SMTP (Produção), caso contrário, usa Console (Desenvolvimento)
+if os.environ.get('EMAIL_HOST_USER'):
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST = os.environ.get('EMAIL_HOST', 'smtp.gmail.com')
+    EMAIL_PORT = int(os.environ.get('EMAIL_PORT', 587))
+    EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', 'True') == 'True'
+    EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+    EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+else:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    EMAIL_HOST_USER = 'contato@andrecode.com.br'
 
-# Para enviar e-mails reais em produção, descomente e configure as linhas abaixo:
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-# EMAIL_HOST_USER = 'seu-email@gmail.com'
-# EMAIL_HOST_PASSWORD = 'sua-senha-de-aplicativo'
-
-DEFAULT_FROM_EMAIL = 'Andrécode.py Multimarcas <contato@andrecode.com.br>'
-# Caso EMAIL_HOST_USER não esteja definido, usamos um valor padrão para evitar erros
-EMAIL_HOST_USER = 'contato@andrecode.com.br'
+DEFAULT_FROM_EMAIL = f'Andrécode.py Multimarcas <{EMAIL_HOST_USER}>'
+# E-mail que vai receber as notificações de novos contatos
+NOTIFY_EMAIL = os.environ.get('NOTIFY_EMAIL', EMAIL_HOST_USER)
