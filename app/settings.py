@@ -151,3 +151,7 @@ else:
 DEFAULT_FROM_EMAIL = f'Andrécode.py Multimarcas <{EMAIL_HOST_USER}>'
 # E-mail que vai receber as notificações de novos contatos
 NOTIFY_EMAIL = os.environ.get('NOTIFY_EMAIL', EMAIL_HOST_USER)
+
+# TELEGRAM SETTINGS
+TELEGRAM_BOT_TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN')
+TELEGRAM_CHAT_ID = os.environ.get('TELEGRAM_CHAT_ID')

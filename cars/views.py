@@ -8,6 +8,8 @@ from cars.models import Car
 from .forms import CarModelForm, MessageForm
 from django.core.mail import send_mail
 from django.conf import settings
+import urllib.request
+import urllib.parse
 
 
 class CarsListView(ListView):
@@ -79,10 +81,21 @@ def contact_view(request):
             # Salva no Banco de Dados
             message_obj = form.save()
             
-            # Prepara o e-mail
+            # Prepara o e-mail e Telegram
             subject = f"Novo contato: {message_obj.subject}"
             email_body = f"Nome: {message_obj.name}\nE-mail: {message_obj.email}\nAssunto: {message_obj.subject}\n\nMensagem:\n{message_obj.message}"
             
+            # Envia para o Telegram if configurado
+            if settings.TELEGRAM_BOT_TOKEN and settings.TELEGRAM_CHAT_ID:
+                try:
+                    text = f"🚗 *Novo Contato no Site!*\n\n*Nome:* {message_obj.name}\n*E-mail:* {message_obj.email}\n*Assunto:* {message_obj.subject}\n\n*Mensagem:* {message_obj.message}"
+                    url = f"https://api.telegram.org/bot{settings.TELEGRAM_BOT_TOKEN}/sendMessage"
+                    data = urllib.parse.urlencode({'chat_id': settings.TELEGRAM_CHAT_ID, 'text': text, 'parse_mode': 'Markdown'}).encode()
+                    req = urllib.request.Request(url, data=data)
+                    urllib.request.urlopen(req)
+                except Exception:
+                    pass
+
             try:
                 send_mail(
                     subject,
