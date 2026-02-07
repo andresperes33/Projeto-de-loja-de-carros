@@ -156,7 +156,8 @@ NOTIFY_EMAIL = os.environ.get('NOTIFY_EMAIL', EMAIL_HOST_USER)
 TELEGRAM_BOT_TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN')
 TELEGRAM_CHAT_ID = os.environ.get('TELEGRAM_CHAT_ID')
 
-# WHATSAPP SETTINGS (Z-API)
-WHATSAPP_INSTANCE_ID = os.environ.get('WHATSAPP_INSTANCE_ID', 'Andre')
+# WHATSAPP SETTINGS (Evolution API)
+WHATSAPP_BASE_URL = os.environ.get('WHATSAPP_BASE_URL', 'https://api.evolution.com') # Ajustar para a sua URL da API
+WHATSAPP_INSTANCE = os.environ.get('WHATSAPP_INSTANCE', 'Andre')
 WHATSAPP_TOKEN = os.environ.get('WHATSAPP_TOKEN', 'DD4B3EF74881-43D4-8D77-AC74CFE42E27')
 WHATSAPP_NUMBER = os.environ.get('WHATSAPP_NUMBER', '5538999821883') # Número que recebe as notificações

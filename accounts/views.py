@@ -25,19 +25,23 @@ def register_view(request):
                 except Exception:
                     pass
 
-            # Notificação WhatsApp (Z-API)
-            if settings.WHATSAPP_INSTANCE_ID and settings.WHATSAPP_TOKEN:
+            # Notificação WhatsApp (Evolution API)
+            if settings.WHATSAPP_BASE_URL and settings.WHATSAPP_INSTANCE and settings.WHATSAPP_TOKEN:
                 try:
                     text = f"👤 *Novo Usuário Cadastrado!*\n\n*Username:* {user.username}\n*E-mail:* {user.email if user.email else 'Não informado'}"
-                    url = f"https://api.z-api.io/instances/{settings.WHATSAPP_INSTANCE_ID}/token/{settings.WHATSAPP_TOKEN}/send-text"
+                    
+                    # Formata a URL da Evolution API
+                    base_url = settings.WHATSAPP_BASE_URL.rstrip('/')
+                    url = f"{base_url}/message/sendText/{settings.WHATSAPP_INSTANCE}"
                     
                     data = json.dumps({
-                        'phone': settings.WHATSAPP_NUMBER,
-                        'message': text
+                        'number': settings.WHATSAPP_NUMBER,
+                        'text': text
                     }).encode('utf-8')
                     
                     req = urllib.request.Request(url, data=data, method='POST')
                     req.add_header('Content-Type', 'application/json')
+                    req.add_header('apikey', settings.WHATSAPP_TOKEN) # Evolution API usa apikey no header
                     urllib.request.urlopen(req)
                 except Exception:
                     pass

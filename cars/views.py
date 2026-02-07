@@ -97,19 +97,23 @@ def contact_view(request):
                 except Exception:
                     pass
 
-            # Envia para o WhatsApp if configurado (Z-API)
-            if settings.WHATSAPP_INSTANCE_ID and settings.WHATSAPP_TOKEN:
+            # Envia para o WhatsApp if configurado (Evolution API)
+            if settings.WHATSAPP_BASE_URL and settings.WHATSAPP_INSTANCE and settings.WHATSAPP_TOKEN:
                 try:
                     text = f"🚗 *Novo Contato no Site!*\n\n*Nome:* {message_obj.name}\n*E-mail:* {message_obj.email}\n*Assunto:* {message_obj.subject}\n\n*Mensagem:* {message_obj.message}"
-                    url = f"https://api.z-api.io/instances/{settings.WHATSAPP_INSTANCE_ID}/token/{settings.WHATSAPP_TOKEN}/send-text"
+                    
+                    # Formata a URL da Evolution API
+                    base_url = settings.WHATSAPP_BASE_URL.rstrip('/')
+                    url = f"{base_url}/message/sendText/{settings.WHATSAPP_INSTANCE}"
                     
                     data = json.dumps({
-                        'phone': settings.WHATSAPP_NUMBER,
-                        'message': text
+                        'number': settings.WHATSAPP_NUMBER,
+                        'text': text
                     }).encode('utf-8')
                     
                     req = urllib.request.Request(url, data=data, method='POST')
                     req.add_header('Content-Type', 'application/json')
+                    req.add_header('apikey', settings.WHATSAPP_TOKEN) # Evolution API usa apikey no header
                     urllib.request.urlopen(req)
                 except Exception:
                     pass
