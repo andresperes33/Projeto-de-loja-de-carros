@@ -10,6 +10,16 @@ class CarModelForm(forms.ModelForm):
         widgets = {
             'value': forms.TextInput(),
         }
+        labels = {
+            'model': 'Modelo',
+            'brand': 'Marca',
+            'factory_year': 'Ano de Fabricação',
+            'model_year': 'Ano do Modelo',
+            'plate': 'Placa',
+            'value': 'Valor',
+            'photo': 'Foto',
+            'bio': 'Descrição',
+        }
 
     def clean_value(self):
         value = self.cleaned_data.get('value')
@@ -56,3 +66,9 @@ class MessageForm(forms.ModelForm):
     class Meta:
         model = Message
         fields = ['name', 'email', 'subject', 'message']
+        labels = {
+            'name': 'Seu Nome',
+            'email': 'Seu E-mail',
+            'subject': 'Assunto',
+            'message': 'Mensagem',
+        }
