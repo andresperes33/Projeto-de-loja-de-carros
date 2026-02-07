@@ -31,11 +31,11 @@ def register_view(request):
                     text = f"👤 *Novo Usuário Cadastrado!*\n\n*Username:* {user.username}\n*E-mail:* {user.email if user.email else 'Não informado'}"
                     
                     base_url = settings.WHATSAPP_BASE_URL.rstrip('/')
-                    url = f"{base_url}/message/sendText/{settings.WHATSAPP_INSTANCE}"
+                    instance_encoded = urllib.parse.quote(settings.WHATSAPP_INSTANCE)
+                    url = f"{base_url}/message/sendText/{instance_encoded}"
                     
                     number = settings.WHATSAPP_NUMBER
-                    if not number.endswith('@s.whatsapp.net'):
-                        number = ''.join(filter(str.isdigit, number))
+                    number = ''.join(filter(str.isdigit, number))
 
                     data = json.dumps({
                         'number': number,
@@ -45,8 +45,11 @@ def register_view(request):
                     req = urllib.request.Request(url, data=data, method='POST')
                     req.add_header('Content-Type', 'application/json')
                     req.add_header('apikey', settings.WHATSAPP_TOKEN)
-                    urllib.request.urlopen(req)
-                except Exception:
+                    
+                    with urllib.request.urlopen(req) as response:
+                        print(f"EVOLUTION_API: Cadastro enviado! Status: {response.getcode()}")
+                except Exception as e:
+                    print(f"EVOLUTION_API_ERROR: {str(e)}")
                     pass
             
             return redirect('login')

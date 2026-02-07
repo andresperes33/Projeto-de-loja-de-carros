@@ -103,27 +103,13 @@ def contact_view(request):
                     text = f"🚗 *Novo Contato no Site!*\n\n*Nome:* {message_obj.name}\n*E-mail:* {message_obj.email}\n*Assunto:* {message_obj.subject}\n\n*Mensagem:* {message_obj.message}"
                     
                     base_url = settings.WHATSAPP_BASE_URL.rstrip('/')
-                    url = f"{base_url}/message/sendText/{settings.WHATSAPP_INSTANCE}"
+                    # Codifica o nome da instância para suportar acentos como 'André'
+                    instance_encoded = urllib.parse.quote(settings.WHATSAPP_INSTANCE)
+                    url = f"{base_url}/message/sendText/{instance_encoded}"
                     
-                    # Evolution API prefere o número com o sufixo @s.whatsapp.net em algumas versões
                     number = settings.WHATSAPP_NUMBER
-                    if not number.endswith('@s.whatsapp.net'):
-                        # Remove caracteres não numéricos apenas por segurança
-                        number = ''.join(filter(str.isdigit, number))
+                    number = ''.join(filter(str.isdigit, number)) # Garante que só existam números
                     
-                    payload = {
-                        "number": number,
-                        "options": {
-                            "delay": 1200,
-                            "presence": "composing",
-                            "linkPreview": False
-                        },
-                        "textMessage": {
-                            "text": text
-                        }
-                    }
-                    
-                    # Algumas versões usam 'text' direto, outras 'textMessage'. Vamos usar o padrão mais comum:
                     data = json.dumps({
                         'number': number,
                         'text': text
@@ -132,8 +118,11 @@ def contact_view(request):
                     req = urllib.request.Request(url, data=data, method='POST')
                     req.add_header('Content-Type', 'application/json')
                     req.add_header('apikey', settings.WHATSAPP_TOKEN)
-                    urllib.request.urlopen(req)
-                except Exception:
+                    
+                    with urllib.request.urlopen(req) as response:
+                        print(f"EVOLUTION_API: Mensagem enviada! Status: {response.getcode()}")
+                except Exception as e:
+                    print(f"EVOLUTION_API_ERROR: {str(e)}")
                     pass
 
             try:
