@@ -10,6 +10,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 import urllib.request
 import urllib.parse
+import json
 
 
 class CarsListView(ListView):
@@ -92,6 +93,23 @@ def contact_view(request):
                     url = f"https://api.telegram.org/bot{settings.TELEGRAM_BOT_TOKEN}/sendMessage"
                     data = urllib.parse.urlencode({'chat_id': settings.TELEGRAM_CHAT_ID, 'text': text, 'parse_mode': 'Markdown'}).encode()
                     req = urllib.request.Request(url, data=data)
+                    urllib.request.urlopen(req)
+                except Exception:
+                    pass
+
+            # Envia para o WhatsApp if configurado (Z-API)
+            if settings.WHATSAPP_INSTANCE_ID and settings.WHATSAPP_TOKEN:
+                try:
+                    text = f"🚗 *Novo Contato no Site!*\n\n*Nome:* {message_obj.name}\n*E-mail:* {message_obj.email}\n*Assunto:* {message_obj.subject}\n\n*Mensagem:* {message_obj.message}"
+                    url = f"https://api.z-api.io/instances/{settings.WHATSAPP_INSTANCE_ID}/token/{settings.WHATSAPP_TOKEN}/send-text"
+                    
+                    data = json.dumps({
+                        'phone': settings.WHATSAPP_NUMBER,
+                        'message': text
+                    }).encode('utf-8')
+                    
+                    req = urllib.request.Request(url, data=data, method='POST')
+                    req.add_header('Content-Type', 'application/json')
                     urllib.request.urlopen(req)
                 except Exception:
                     pass

@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.conf import settings
 import urllib.request
 import urllib.parse
+import json
 
 
 def register_view(request):
@@ -20,6 +21,23 @@ def register_view(request):
                     url = f"https://api.telegram.org/bot{settings.TELEGRAM_BOT_TOKEN}/sendMessage"
                     data = urllib.parse.urlencode({'chat_id': settings.TELEGRAM_CHAT_ID, 'text': text, 'parse_mode': 'Markdown'}).encode()
                     req = urllib.request.Request(url, data=data)
+                    urllib.request.urlopen(req)
+                except Exception:
+                    pass
+
+            # Notificação WhatsApp (Z-API)
+            if settings.WHATSAPP_INSTANCE_ID and settings.WHATSAPP_TOKEN:
+                try:
+                    text = f"👤 *Novo Usuário Cadastrado!*\n\n*Username:* {user.username}\n*E-mail:* {user.email if user.email else 'Não informado'}"
+                    url = f"https://api.z-api.io/instances/{settings.WHATSAPP_INSTANCE_ID}/token/{settings.WHATSAPP_TOKEN}/send-text"
+                    
+                    data = json.dumps({
+                        'phone': settings.WHATSAPP_NUMBER,
+                        'message': text
+                    }).encode('utf-8')
+                    
+                    req = urllib.request.Request(url, data=data, method='POST')
+                    req.add_header('Content-Type', 'application/json')
                     urllib.request.urlopen(req)
                 except Exception:
                     pass
